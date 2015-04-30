@@ -1,0 +1,135 @@
+Working with R to Analyze and Plot Data 
+========================================================
+css: mystyle.css
+author: Di Cook, Eric Hare
+date: 5/15-18/2015
+width: 2000
+height: 1200
+
+<img src="figures/gendermaps.png" width="1500">
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+INTRODUCTION TO R
+========================================================
+
+This material is taken from Garret Grolemund's book "Hands-On Programming with R", and it serves as a quick start on learning to use the software of data analysis. We would encourage you to get a copy of this book if you want to get started on R independently.
+
+The versions of the software that we will use are:
+
+- RStudio 0.98.1103
+- R 3.2.0 "Full of Ingredients"
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+WHY R? REPRODUCIBILITY, AUTOMATION, COMMUNICATION
+========================================================
+
+These three reasons make it an essential tool for analyzing data. R is a programming language. The language was initially research in the 1970s, and it has evolved to be the best (some may argue) language of data analysis. Data analysis needs to be performed on the computer, but you have a choice of using a graphical user interface or a programming language. Don't be afaid of programming! It will equip you to be a data scientist, which is very handy when you come to apply for jobs today. Using the R language 
+
+- encourages reproducibility because it allows you and others to re-create a past analysis, essential for good data science. 
+- enables automation, so that an analysis can be re-run easily if the data changes
+- enables communication because the code is just text, so can be emailed to others to read, can be googled for tracking down errors and help. 
+
+Learning a new language can be frustrating. It will take time to be fluent. This is normal. It is worth it!
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+CREATE PROJECT
+========================================================
+
+
+
+The top left pane has R code embedded in a markdown document, so that you can write code, and write explanations, simultaneously. It is a good way to keep your analysis organized: write code, document the code and the results, and output it to a communicable format. 
+
+Using the "Knit HTML" button we can process the document, get the R code to run and produce an html page, that looks like this
+
+From the html, you can convert to a pdf document or to a Microsoft Word document. 
+
+***
+
+!["html page from Rmd"](figures/html.jpg)
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+
+Using the RStudio Interface
+========================================================
+
+Lines of code in the text editor window can be run one-by-one by setting the cursor to point to the line, and clicking the "Run" button. Blocks of code can be run by highlighting the lines and clicking "Run". Once you are sure that the code runs properly, you can embed it in the markdown and use "Knit HTML" to generate your document. My recommendation is to work this way, incrementally, in small chunks and build up to a full final document. 
+
+***
+
+!["RStudio Interface"](figures/RStudio.jpg)
+
+R as a calculator
+===
+class: small-code
+
+```{r}
+1+1
+2*5
+12/4
+20-3
+100:130
+```
+
+The ":" operator means all the integers from 100 and 130, inclusive. 
+
+If you type a command that R doesn't recognize you will get an error, eg. 
+
+`> 5 % 3`
+
+`Error: unexpected input in "5 % 3"`
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+Objects
+===
+
+R objects store data. The assignment operator, `<-` is used to name the object. It is also possible to use `=` to mean the same thing. 
+
+```{r}
+mynumbers <- 5:12
+mynumbers
+mynumbers + 2
+```
+
+Names can be almost anything, except for special characters `^, !, $, @, +, -, /, *`. It is good practice to name your objects with some meaning for what they contain, be reasonably short (less typiing). They should from common R functions, for example, don't use `data` because it is also used to load stored data from packages, or `c` because this is an R function that allows you to collect a bunch of objects together. You won't get errors by using these names but you may get confused when you come back and look at your code later. 
+
+Types of objects
+===
+
+Objects can be of different types. The object `mynumbers` is a vector of numbers. Numbers can be various types also: integer or double.
+
+```{r}
+typeof(mynumbers)
+is.numeric(mynumbers)
+is.vector(mynumbers)
+length(mynumbers)
+```
+
+Other common types of objects for data analysis are characters, logicals, factors, dates. Factors store categorical data. Dates have a special format that enables it to be treated similarly to how we use dates in real life.
+
+```{r}
+mytext <- c("hello", "class")
+typeof(mytext)
+is.numeric(mytext)
+is.character(mytext)
+length(mytext)
+mylogic <- c(TRUE, FALSE, TRUE, TRUE)
+typeof(mylogic)
+summary(mylogic)
+gender <- factor(c("male", "female", "female", "female", "male"))
+gender
+typeof(gender)
+levels(gender)
+summary(gender)
+now <- Sys.time()
+now
+typeof(now)
+class(now)
+today <- as.Date("08/26/2014", format="%m/%d/%Y")
+today
+```
+
