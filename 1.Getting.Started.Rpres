@@ -69,7 +69,6 @@ For the advanced user, you can also write in latex (instead of markdown) and
 
 R as a calculator
 ===
-class: small-code
 
 ```{r, results='hold'}
 1+1
@@ -152,3 +151,31 @@ mymode <- function(x) {
 }
 mymode(c(rep("A", 5), rep("B", 3)))
 ```
+
+Function structure
+===
+
+```{r, echo=FALSE}
+mymode <- function(x, labelit="m") {
+  ux <- unique(x)
+  ux <- ux[which.max(tabulate(match(x, ux)))]
+  names(ux) <- labelit
+  ux
+}
+```
+
+```mymode <- function(x, labelit="m") ....```
+
+- `x` is an input to the function that is essential to provide each time.
+
+- `label` is an optional addition that mostly will be the default value, but the user could change it to something else, simply by changing it in the function on the fly.
+
+```{r, results='hold'}
+mymode(x=c(rep("A", 5), rep("B", 3)))
+mymode(x=c(rep("A", 5), rep("B", 3)), labelit="mode")
+```
+
+Next
+====
+
+Let's make some plots of data....

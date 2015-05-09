@@ -1,0 +1,25 @@
+Introduction to Plotting Data
+========================================================
+css: mystyle.css
+author: Di Cook, Eric Hare
+date: 5/15-18/2015
+width: 1600
+height: 800
+
+Using the package ggplot2
+========================================================
+
+Elements of a plot
+
+- data
+- mapping of variables to graphical elements
+- layers
+
+Basic mappings
+========================================================
+
+Variable type
+
+Cleveland's principles
+
+Perceptual principles
