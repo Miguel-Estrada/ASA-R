@@ -12,14 +12,203 @@ Using the package ggplot2
 Elements of a plot
 
 - data
-- mapping of variables to graphical elements
+- aesthetics: mapping of variables to graphical elements
+- geom: type of plot structure to use
 - layers
+
+Data - Oscar winners
+===
+
+Extracted from The Oscars Database. https://oscars.silk.co. 
+
+Motivation "Tonight we honor Hollywood’s best and whitest– sorry, brightest" (Neil Patrick Harris, Oscars 2015)
+
+```{r, results='hold'}
+oscars <- read.csv("data/oscars.csv", stringsAsFactors=FALSE)
+acting <- subset(oscars, AwardCategory=="Actor")
+table(acting$Ethnicity)
+```
+
+Variables
+===
+
+- Categorical: Name, Sex, Birthplace, CityofBirth, State, Ethnicity, SexualOrientation, Religion, AwardCategory, Movie, Country
+
+- Quantitative: Age, NumberofAwards
+
+- Temporal: DOB, Year
+
+Mapping principles
+===
+
+Cleveland & McGill (1984) 
+
+Data element to graphical element in rank order of accuracy in returning data value, is as follows:
+
+1. Position - common scale
+2. Position - nonaligned scale
+3. Length, direction, angle
+4. ￼￼Area
+5. Volume, curvature
+6. Shading, color
+
+Results corroborated by Heer & Bostock (2010).
+
+***
+
+<img align="center" src="figures/cleveland.png" width="600">
 
 Basic mappings
 ========================================================
 
-Variable type
+Quantitative information should be mapped to position along a line, as first preference. Only two quantitative variables in the data: Age, NumberofAwards. Could treat year as quantitive to begin, too.
 
-Cleveland's principles
+But unit of the data is person, award winner, need to aggregate based on categorical variables. 
+Then were will have counts for categories, which is quantitative information.
+
+Let's look at Ethnicity. 
+
+***
+
+```{r, results='hold'}
+library(ggplot2)
+qplot(Ethnicity, data=acting)
+```
+
+Drill down
+========================================================
+
+The bar for whites is SO big, remove to focus on other categories. 
+
+***
+
+```{r, results='hold'}
+qplot(Ethnicity, data=subset(acting, Ethnicity != "White"))
+```
+
+Grammar
+===
+
+```qplot(Ethnicity, data=acting)```
+
+Data and variable are supplied. Implicit to these instructions, is the mapping and geom.
+
+```ggplot(data=acting) + geom_bar(mapping=aes(x=Ethnicity, y=..count..))```
+
+- `x` is mapped to categorical variable
+- `y` is automatically calculated as the count of each level
+- `count` is represented as a bar (read off using position along a line)
+
+Flipping axes, adding color
+===
+
+Flip axes to get better read on long labels
+
+```{r, results='hold'}
+qplot(Ethnicity, data=subset(acting, Ethnicity != "White")) + coord_flip()
+```
+
+***
+
+Color bars by gender
+
+```{r, results='hold'}
+qplot(Ethnicity, data=subset(acting, Ethnicity != "White"), fill=Sex) + coord_flip() + theme(legend.position="bottom")
+```
+
+Color choice
+===
+
+There are several choices of color schemes: RColorBrewer developed for maps, and is good for area plots. To see possibilities. 
+
+```
+library(RColorBrewer)
+display.brewer.all()
+```
+
+***
+
+```{r, results='hold'}
+qplot(Ethnicity, data=subset(acting, Ethnicity != "White"), fill=Sex) + 
+  scale_fill_brewer(type="qual", palette=2) +
+  coord_flip() + 
+  theme(legend.position="bottom")
+```
+
+Temporal Trend
+===
+
+These numbers are aggregated across almost a hundred years. Maybe the proportions have changed over time. We will aggregate by decade, and compute proportions for each ethnic class, and take a look at these.
+
+```{r ,results='hold'}
+acting$Decade <- floor(acting$Year/10)*10
+ptable <- data.frame(prop.table(table(acting$Decade, acting$Ethnicity), 1))
+colnames(ptable) <- c("Decade", "Ethnicity", "Prop")
+ptable$Decade <- as.numeric(as.character(ptable$Decade))
+```
+
+Temporal Trend
+===
+
+```{r, results='hold', fig.width=12, fig.height=8, fig.align='center'}
+qplot(Decade, Prop, data=ptable, colour=Ethnicity, group=Ethnicity, size=I(5)) + geom_line()
+```
+
+Facetting
+===
+
+Whites dominate again, so lets use facetting to zoom in. Focus only on ethnicities with reasonable numbers. 
+
+```{r, results='hold', fig.width=12, fig.height=6, fig.align='center'}
+qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"), colour=Ethnicity, group=Ethnicity, size=I(5)) + geom_line() + scale_colour_brewer(type="qual", palette=2) +
+facet_wrap(~Ethnicity, scales="free_y")
+```
+
+Examine trend
+===
+
+Use a trend line, loess, instead of connecting the dots.
+
+```{r, results='hold', fig.width=14, fig.height=5, fig.align='center'}
+qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"), 
+      colour=Ethnicity, size=I(5)) + geom_smooth(se=F) + 
+  scale_colour_brewer(type="qual", palette=2) +
+  facet_wrap(~Ethnicity, scales="free_y")
+```
+
+Layering
+===
+
+Pull demographics data from http://en.wikipedia.org/wiki/Historical_racial_and_ethnic_demographics_of_the_United_States. 
+
+Overlay these values as a line plot on the Oscars proportions.
+
+```{r, results='hold', fig.width=14, fig.height=5, fig.align='center'}
+library(reshape2)
+pop.prop <- read.csv("data/wiki-race.csv")
+pop.prop.m <- melt(pop.prop[,1:3], id="Year")
+colnames(pop.prop.m) <- c("Decade", "Ethnicity", "Prop")
+pop.prop.m$Prop <- pop.prop.m$Prop/100
+```
+
+Layering
+===
+
+```{r, results='hold', fig.width=14, fig.height=5, fig.align='center'}
+qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"), 
+      colour=Ethnicity, group=Ethnicity, size=I(5)) +
+  facet_wrap(~Ethnicity, scales="free_y") +
+  geom_line(data=pop.prop.m, aes(x=Decade, y=Prop, colour=Ethnicity, group=Ethnicity)) + 
+  scale_colour_brewer(type="qual", palette=2) 
+```
+
+
+Mosaic
+===
 
 Perceptual principles
+===
+
+Proximity
+
+Applying color, qualitative, diverging
