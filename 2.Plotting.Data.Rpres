@@ -280,6 +280,11 @@ qplot(s.weekd, p, data=d, geom=c("point", "line"), ylim=c(0,0.045),
       xlab="Day of the Week", ylab="Proportion purchased", group=1)
 ```
 
+Perceptual principles: proximity
+===
+
+Add example from the soccer stats from Danny Bero's web site
+
 Perceptual principles: color
 ===
 

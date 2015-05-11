@@ -7,12 +7,12 @@ Packages, latest versions and make sure to install the dependencies of these pac
 
 - rmarkdown, knitr
 - ggplot2
-- plyr, dplyr
+- plyr, dplyr, stringr
 - tidyr
 - reshape2
 - lubridate
 - devtools
-- dichromat, munsell, RColorBrewer
-- maps, ggmaps, maptools, shapefiles, sp, rworldmap
+- dichromat, munsell, RColorBrewer, scales
+- maps, ggmap, maptools, shapefiles, sp, rworldmap
 - MASS
-
+- shiny
