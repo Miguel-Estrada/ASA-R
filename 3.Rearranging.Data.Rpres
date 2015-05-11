@@ -6,7 +6,7 @@ date: 5/15-18/2015
 width: 1600
 height: 800
 
-Using the package reshape, dplyr, tidyr
+Using the packages tidyr, dplyr
 ========================================================
 During a ten week sensory experiment, 12 individuals were asked to assess taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do the fries taste?)
 
@@ -14,6 +14,7 @@ French fries were fried in one of three different oils, and each week individual
 ```{r, echo = FALSE, results='asis'}
 library(xtable)
 library(reshape2)
+library(tidyr)
 
 print(xtable(head(french_fries)), type = "html")
 ```
@@ -59,38 +60,80 @@ to this **long format**:
 
 <img src="figures/tablelong.png" alt="Drawing" style="width: 300px;"/>
 
-Melting
+Gathering
 ========================================================
-- When melting, you need to specify the **measured** variables and the **identifiers**
+- When gathering, you need to specify the **keys** (identifiers) and the **values** (measures).
 
-```{r, eval=FALSE}
-melt(data, measure.var=..., id.var=...)
-```
-
-Identifiers/Keys:
+Keys/Identifiers:
 - Identify a record (must be unique)
 - Example: Indices on an random variable
 - Fixed by design of experiment (known in advance)
 - May be single or composite (may have one or more variables)
 
-Measured Variables:
+Values/Measures:
 - Collected during the experiment (not known in advance)
 - Usually numeric quantities
 
-Melting the French Fry Data
+Gathering the French Fry Data
 ========================================================
 ```{r}
-french_fries_melt <- melt(french_fries, id.vars = c("time", "treatment", "subject", "rep"))
+french_fries_long <- gather(french_fries, key = variable, value = rating, potato:painty)
 
-head(french_fries_melt)
+head(french_fries_long)
 ```
 
 Let's Reconstruct our Plot
 ========================================================
 ```{r}
-french_fries_melt_sub <- french_fries_melt[french_fries_melt$time == 10,]
+french_fries_long_sub <- french_fries_long[french_fries_long$time == 10,]
 
-qplot(variable, value, data = french_fries_melt_sub, fill = variable, geom = "boxplot") + ylab("rating") 
+qplot(variable, rating, data = french_fries_long_sub, fill = variable, geom = "boxplot")
+```
+
+Long to Wide
+========================================================
+In certain applications, we may wish to take a long dataset and convert it to a wide dataset (Perhaps displaying in a table).
+
+```{r}
+head(french_fries_long)
+```
+
+Spread
+========================================================
+We use the **spread** function from tidyr to do this:
+
+```{r}
+french_fries_wide <- spread(french_fries_long, key = variable, value = rating)
+
+head(french_fries_wide)
+```
+
+The Split-Apply-Combine Approach
+========================================================
+- *Split* a dataset into many smaller sub-datasets
+- *Apply* some function to each sub-dataset to compute a result
+- *Combine* the results of the function calls into a one dataset
+
+<img src="figures/sac.png" alt="Drawing" style="width: 600px; margin-left: 500px;"/>
+
+Split-Apply-Combine in dplyr
+========================================================
+```{r}
+library(dplyr)
+
+french_fries_split <- group_by(french_fries_long, variable) # SPLIT
+french_fries_apply <- summarise(french_fries_split, rating = mean(rating, na.rm = TRUE)) # APPLY + COMBINE
+french_fries_apply
+```
+
+The pipe operator
+========================================================
+dplyr allows us to chain together these data analysis tasks using the `%>%` (pipe) operator:
+
+```{r}
+french_fries %>% gather(key = variable, value = rating, potato:painty)
+             %>% group_by(variable)
+             %>% summarise(rating = mean(rating, na.rm = TRUE))
 ```
 
 
