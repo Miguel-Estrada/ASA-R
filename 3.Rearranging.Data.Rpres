@@ -108,6 +108,21 @@ french_fries_wide <- spread(french_fries_long, key = variable, value = rating)
 head(french_fries_wide)
 ```
 
+YOUR TURN
+========================================================
+1. Read in the billboard top 100 music data, which contains songs that entered the billboard charts in the year 2000, and subset only songs by Backstreet Boys and N'Sync:
+```{r}
+billboard <- read.csv("data/billboard.csv")
+billboard <- subset(billboard, artist %in% c("Backstreet Boys, The", "N'Sync"))
+```
+2. Use ``tidyr`` to convert this data into a long format appropriate for plotting a time series (date on the x axis, chart position on the y axis)
+3. Use ``ggplot2`` to create this time series plot:
+```{r, echo=FALSE}
+long_billboard <- gather(billboard, key = week, value = rank, wk1:wk76)
+
+qplot(week, rank, data = long_billboard, geom = "line", colour = artist, group = track)
+```
+
 The Split-Apply-Combine Approach
 ========================================================
 - *Split* a dataset into many smaller sub-datasets
@@ -128,14 +143,67 @@ french_fries_apply
 
 The pipe operator
 ========================================================
-dplyr allows us to chain together these data analysis tasks using the `%>%` (pipe) operator:
+- dplyr allows us to chain together these data analysis tasks using the `%>%` (pipe) operator
+- `x %>% f(y)` is shorthand for `f(x, y)`
+- Example:
 
 ```{r}
-french_fries %>% gather(key = variable, value = rating, potato:painty)
-             %>% group_by(variable)
-             %>% summarise(rating = mean(rating, na.rm = TRUE))
+french_fries %>%
+    gather(key = variable, value = rating, potato:painty) %>%
+    group_by(variable) %>%
+    summarise(rating = mean(rating, na.rm = TRUE))
 ```
 
+dplyr verbs
+========================================================
+There are five primary dplyr **verbs**, representing distinct data analysis tasks:
+
+- Filter: Remove the rows of a data frame, producing subsets
+- Arrange: Reorder the rows of a data frame
+- Select: Select particular columns of a data frame
+- Mutate: Add new columns that are functions of existing columns
+- Summarise: Create collapsed summaries of a data frame
+    
+Filter
+========================================================
+```{r}
+french_fries %>%
+    filter(subject == 3, time == 1)
+```
+
+Arrange
+========================================================
+```{r}
+french_fries %>%
+    arrange(desc(rancid)) %>%
+    head
+```
+
+Select
+========================================================
+```{r}
+french_fries %>%
+    select(time, treatment, subject, rep, potato) %>%
+    head
+```
+
+Summarise
+========================================================
+```{r}
+french_fries %>%
+    group_by(time, treatment) %>%
+    summarise(mean_rancid = mean(rancid), sd_rancid = sd(rancid))
+```
+
+YOUR TURN
+========================================================
+1. Read in the flights data:
+```{r}
+flights <- read.csv("data/flights.csv")
+```
+This dataset contains information on over 300,000 flights that departed from New York City in the year 2013.
+2. Using dplyr and the pipe operator, create a data frame consisting of the average arrival delay (``arr_delay``) based on the destination airport (``dest``). Sort this data frame in descending order, so the destination airport with the largest delay is first.
+3. Find out the most used airports for each airline carrier.
 
 PISA data
 ========================================================
