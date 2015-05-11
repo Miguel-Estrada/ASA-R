@@ -8,7 +8,94 @@ height: 800
 
 Using the package reshape, dplyr, tidyr
 ========================================================
+During a ten week sensory experiment, 12 individuals were asked to assess taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do the fries taste?)
+
+French fries were fried in one of three different oils, and each week individuals had to assess six batches of french fries (all three oils, replicated twice)
+```{r, echo = FALSE, results='asis'}
+library(xtable)
+library(reshape2)
+
+print(xtable(head(french_fries)), type = "html")
+```
+
+This format is not ideal for data analysis
+========================================================
+What code would be needed to plot each of the ratings over time as a different color?
+```{r, eval=FALSE}
+library(ggplot2)
+
+french_sub <- french_fries[french_fries$time == 10,]
+
+qplot("1_potato", potato, data = french_sub, fill = I("red"), geom = "boxplot") +
+    geom_boxplot(aes(x = "2_buttery", y = buttery), fill = I("orange")) +
+    geom_boxplot(aes(x = "3_grassy", y = grassy), fill = I("yellow")) +
+    geom_boxplot(aes(x = "4_rancid", y = rancid), fill = I("green")) +
+    geom_boxplot(aes(x = "5_painty", y = painty), fill = I("blue")) +
+    xlab("variable") + ylab("rating")
+```
+
+The Plot
+========================================================
+```{r, echo=FALSE}
+library(ggplot2)
+
+french_sub <- french_fries[french_fries$time == 10,]
+
+qplot("1_potato", potato, data = french_sub, fill = I("red"), geom = "boxplot") +
+    geom_boxplot(aes(x = "2_buttery", y = buttery), fill = I("orange")) +
+    geom_boxplot(aes(x = "3_grassy", y = grassy), fill = I("yellow")) +
+    geom_boxplot(aes(x = "4_rancid", y = rancid), fill = I("green")) +
+    geom_boxplot(aes(x = "5_painty", y = painty), fill = I("blue")) +
+    xlab("variable") + ylab("rating")
+```
+
+What we have and what we want
+========================================================
+We want to change this **wide format**:
+
+<img src="figures/tableoverview.png" alt="Drawing" style="width: 1000px;"/>
+
+to this **long format**:
+
+<img src="figures/tablelong.png" alt="Drawing" style="width: 300px;"/>
+
+Melting
+========================================================
+- When melting, you need to specify the **measured** variables and the **identifiers**
+
+```{r, eval=FALSE}
+melt(data, measure.var=..., id.var=...)
+```
+
+Identifiers/Keys:
+- Identify a record (must be unique)
+- Example: Indices on an random variable
+- Fixed by design of experiment (known in advance)
+- May be single or composite (may have one or more variables)
+
+Measured Variables:
+- Collected during the experiment (not known in advance)
+- Usually numeric quantities
+
+Melting the French Fry Data
+========================================================
+```{r}
+french_fries_melt <- melt(french_fries, id.vars = c("time", "treatment", "subject", "rep"))
+
+head(french_fries_melt)
+```
+
+Let's Reconstruct our Plot
+========================================================
+```{r}
+french_fries_melt_sub <- french_fries_melt[french_fries_melt$time == 10,]
+
+qplot(variable, value, data = french_fries_melt_sub, fill = variable, geom = "boxplot") + ylab("rating") 
+```
+
 
 PISA data
+========================================================
 
 Glyph maps
+========================================================
