@@ -27,7 +27,8 @@ library(ggplot2)
 library(maps)
 library(ggmap)
 library(rworldmap)
-mc <- joinCountryData2Map(actcountry, joinCode = "NAME", nameJoinColumn = "Country", mapResolution = "low")
+mc <- joinCountryData2Map(actcountry, joinCode = "NAME", 
+    nameJoinColumn = "Country", mapResolution = "low")
 ```
 
 Now draw 
@@ -43,7 +44,8 @@ And tweak
 ```{r, results='hold', fig.align='center', fig.width=15}
 library(RColorBrewer)
 clrs <- brewer.pal(5,'RdPu')
-mapCountryData(mc, nameColumnToPlot="Freq", catMethod=c(0,1,5, 50, 100, 300), colourPalette=clrs)
+mapCountryData(mc, nameColumnToPlot="Freq", catMethod=c(0,1,5, 50, 100, 300), 
+               colourPalette=clrs)
 ```
 
 Maps more generally
@@ -131,7 +133,8 @@ states.class.map <- states.class.map[order(states.class.map$order),]
 If a categorical variable is assigned as the fill color then ```qplot``` will assign different hues for each category
 
 ```{r, fig.height = 6, fig.width=10, fig.align='center'}
-qplot(long, lat, geom="polygon", data=states.class.map, group=group, fill=StateGroups, colour=I("black")) + coord_map()
+qplot(long, lat, geom="polygon", data=states.class.map, group=group, 
+      fill=StateGroups, colour=I("black")) + coord_map()
 ```
 
 Numerical information using shade and intensity
@@ -175,14 +178,15 @@ Adding Numerical Information
 Average number of alcoholic drinks per day by state and gender
 
 ```{r, fig.show='hide'}
-qplot(long, lat, geom="polygon", data=states.sex.map, group=group, fill=avg.drnk) +  
+qplot(long, lat, geom="polygon", data=states.sex.map, 
+  group=group, fill=avg.drnk) +  
   coord_map() + facet_grid(sex ~ .)
 ```
 
 ***
 ```{r, echo=FALSE, fig.height = 6, fig.width=10, fig.align='center'}
-qplot(long, lat, geom="polygon", data=states.sex.map, group=group, fill=avg.drnk) +  
-  coord_map() + facet_grid(sex ~ .)
+qplot(long, lat, geom="polygon", data=states.sex.map, group=group, 
+  fill=avg.drnk) + coord_map() + facet_grid(sex ~ .)
 ```
 
 Your turn
@@ -231,7 +235,7 @@ Show it
 ```{r, fig.align='center', echo=FALSE, fig.height=10, fig.width=16}
 qplot(long, lat, geom="polygon", data=states.map, group=group, fill=avg.drnk) + 
   coord_map() +  theme_bw() +
-  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="red") + 
+  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="black") + 
   new_theme_empty +
   ggtitle("Average Number of Alcoholic Beverages Consumed Per Day")
 ```
@@ -339,7 +343,6 @@ Arranging multiple plots on a page
 ===
 
 ```{r}
-library(gridExtra)
 acting$Decade <- floor(acting$Year/10)*10
 library(dplyr)
 as <- summarise(group_by(acting, Decade), age=mean(Age, na.rm=T), 
@@ -356,17 +359,15 @@ p4 <- qplot(Decade, orientation, data=as) + geom_smooth(se=F)
 Plot it
 ===
 
-```{r, fig.height=10, fig.width=10, fig.align='center'}
+```{r, fig.height=4, fig.width=18, fig.align='center'}
+library(gridExtra)
 grid.arrange(p1, p2, p3, p4, ncol=4)
 ```
 
-What to include
+Summary
 ===
 
-- underlaying google map
-- layering model output
-- multivariate
-- themes
-- grid.arrange
-- adding subplots
-
+- Grammar is good!
+- Almost anything is possible
+- R Graphics Cookbook by Winston Chang http://www.cookbook-r.com/Graphs/
+- http://stackoverflow.com
