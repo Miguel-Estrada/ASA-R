@@ -319,20 +319,17 @@ Parallel coordinate plots
 left:60%
 
 ```{r, fig.show='hide'}
-data(diamonds)
-diamonds.samp <- diamonds[sample(1:dim(diamonds)[1],100),]
-
-# basic parallel coordinate plot, using default settings
-# ggparcoord(data = diamonds.samp, columns = c(1,5:10))
-
-# this time, color by diamond cut
-ggparcoord(data = diamonds.samp, columns = c(1,5:10), groupColumn = 2)
+iris2 <- iris
+iris2$alphaLevel <- c("setosa" = 0.2, "versicolor" = 0.3, "virginica" = 0)[iris2$Species]
+gpd <- ggparcoord(data = iris2, columns = 1:4, groupColumn = 5, order = "anyClass",
+  showPoints = TRUE, title = "Parallel Coordinate Plot for the Iris Data",
+  alphaLines = "alphaLevel")
 ```
 
 ***
 
 ```{r, echo=FALSE, fig.width=10, fig.height=5}
-ggparcoord(data = diamonds.samp, columns = c(1,5:10), groupColumn = 2)
+gpd
 ```
 
 What to include
