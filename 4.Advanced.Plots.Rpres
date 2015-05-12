@@ -248,10 +248,59 @@ Putting it together
 
 ***
 
-BP Oil Spill May 24 2010 catastrophic environmental disaster in the Gulf.
+BP Oil Spill May 24 2010 catastrophic environmental disaster in the Gulf. Different measurements provided by NOAA, EPA, US Fish and Wildlife.
 
-```{r echo=FALSE}
+```{r}
+load("data/noaa.rdata")
 animals <- read.csv("data/animal.csv")
+```
+
+Map the data
+===
+
+```{r, fig.show='hold'}
+qplot(Longitude, Latitude, colour=callSign, data=floats) + coord_map()
+qplot(Longitude, Latitude, colour=callSign, data=boats) + coord_map()
+qplot(Longitude, Latitude, colour=callSign, data=gliders) + coord_map()
+```
+
+Add a map
+===
+left:60%
+
+```{r, fig.show='hide'}
+ggplot() +   # plot without a default data set
+ geom_path(data=states, aes(x=long, y=lat, group=group)) + 
+ geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign)) +   
+ geom_point(aes(x, y), shape="x", size=5, data=rig) + 
+ geom_text(aes(x, y), label="BP Oil rig", shape="x", size=5, data=rig, hjust = -0.1) + 
+ xlim(c(-91, -80)) + 
+ ylim(c(22,32)) + coord_map() + new_theme_empty
+```
+
+***
+```{r, echo=FALSE}
+ggplot() +   # plot without a default data set
+ geom_path(data=states, aes(x=long, y=lat, group=group)) + 
+ geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign)) +   
+ geom_point(aes(x, y), shape="x", size=5, data=rig) + 
+ geom_text(aes(x, y), label="BP Oil rig", shape="x", size=5, data=rig, hjust = -0.1) + 
+ xlim(c(-91, -80)) + 
+ ylim(c(22,32)) + coord_map() + new_theme_empty
+```
+
+Get fancy
+===
+
+```{r, fig.show='hide'}
+gm <- get_googlemap(center = c(lon = -86.77, lat = 26.99), zoom=6)
+ggmap(gm) + geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign))
+```
+
+***
+```{r, echo=FALSE}
+gm <- get_googlemap(center = c(lon = -86.77, lat = 26.99), zoom=6)
+ggmap(gm) + geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign))
 ```
 
 Pairs Plot
