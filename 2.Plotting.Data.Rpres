@@ -349,7 +349,7 @@ Showing the statistics
 
 ```{r, results='hold', fig.show='hold'}
 agesex <- summarise(group_by(acting, Decade, Sex), m=mean(Age, na.rm=T), 
-                    s=sd(Age, na.rm=T))
+                    s=qt(0.975, length(Age)-1)*sd(Age, na.rm=T)/length(Age))
 qplot(Decade, m, data=agesex, group=Sex, colour=Sex, geom=c("point", "line")) + 
   theme(legend.position="bottom")
 qplot(Decade, m, data=agesex, group=Sex, colour=Sex, geom=c("point", "line")) + 
