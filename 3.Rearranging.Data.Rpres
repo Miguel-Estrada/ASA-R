@@ -56,9 +56,10 @@ We want to change this **wide format**:
 
 <img src="figures/tableoverview.png" alt="Drawing" style="width: 1000px;"/>
 
+***
 to this **long format**:
 
-<img src="figures/tablelong.png" alt="Drawing" style="width: 300px;"/>
+<img src="figures/tablelong.png" alt="Drawing" style="width: 200px;"/>
 
 Gathering
 ========================================================
@@ -84,9 +85,15 @@ head(french_fries_long)
 
 Let's Reconstruct our Plot
 ========================================================
-```{r}
-french_fries_long_sub <- french_fries_long[french_fries_long$time == 10,]
+```{r, fig.show='hide'}
+french_fries_long_sub <- french_fries_long[
+  french_fries_long$time == 10,]
 
+qplot(variable, rating, data = french_fries_long_sub, fill = variable, geom = "boxplot")
+```
+
+***
+```{r, echo=FALSE}
 qplot(variable, rating, data = french_fries_long_sub, fill = variable, geom = "boxplot")
 ```
 
@@ -220,7 +227,7 @@ The **lubridate** package helps tackle some of these issues.
 
 Basic Lubridate Use
 ========================================================
-```{r}
+```{r, results='hold'}
 library(lubridate)
 
 now()
@@ -231,7 +238,7 @@ today() - days(2)
 
 Parsing Dates
 ========================================================
-```{r}
+```{r, results='hold'}
 ymd("2013-05-14")
 mdy("05/14/2013")
 dmy("14052013")
@@ -244,6 +251,7 @@ YOUR TURN
 2. Use dplyr to calculate the average departure delay for each date.
 3. Plot a time series of the date versus the average departure delay
 
+***
 ```{r, echo=FALSE}
 flights$date <- ymd(paste(flights$year, flights$month, flights$day, sep = "-"))
 delay.dat <- flights %>% group_by(date) %>% summarise(dep_delay = mean(dep_delay, na.rm = TRUE))
@@ -251,8 +259,3 @@ delay.dat <- flights %>% group_by(date) %>% summarise(dep_delay = mean(dep_delay
 qplot(date, dep_delay, geom = "line", data = delay.dat)
 ```
 
-PISA data
-========================================================
-
-Glyph maps
-========================================================
