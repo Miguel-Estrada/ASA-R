@@ -282,8 +282,12 @@ qplot(s.weekd, p, data=d, geom=c("point", "line"), ylim=c(0,0.045),
 
 Perceptual principles: proximity
 ===
+left: 40%
 
-Add example from the soccer stats from Danny Bero's web site
+Primary purpose is to examine wins and losses of two teams. Closest bars are the two teams, faceted by win/loss. 
+***
+
+<img align="right" src="figures/soccer-stats.png" width="1000">
 
 Perceptual principles: color
 ===
