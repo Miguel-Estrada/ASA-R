@@ -316,13 +316,16 @@ ggpairs(acting, columns=c(2,6,8))
 
 Parallel coordinate plots
 ===
-left:60%
 
 ```{r, fig.show='hide'}
 iris2 <- iris
-iris2$alphaLevel <- c("setosa" = 0.2, "versicolor" = 0.3, "virginica" = 0)[iris2$Species]
-gpd <- ggparcoord(data = iris2, columns = 1:4, groupColumn = 5, order = "anyClass",
-  showPoints = TRUE, title = "Parallel Coordinate Plot for the Iris Data",
+iris2$alphaLevel <- c("setosa" = 0.2, 
+  "versicolor" = 0, "virginica" = 0.5)[iris2$Species]
+gpd <- ggparcoord(data = iris2, 
+  columns = 1:4, 
+  groupColumn = 5, order = "anyClass",
+  showPoints = TRUE, 
+  title = "Iris Data",
   alphaLines = "alphaLevel")
 ```
 
@@ -330,6 +333,31 @@ gpd <- ggparcoord(data = iris2, columns = 1:4, groupColumn = 5, order = "anyClas
 
 ```{r, echo=FALSE, fig.width=10, fig.height=5}
 gpd
+```
+
+Arranging multiple plots on a page
+===
+
+```{r}
+library(gridExtra)
+acting$Decade <- floor(acting$Year/10)*10
+library(dplyr)
+as <- summarise(group_by(acting, Decade), age=mean(Age, na.rm=T), 
+        white=length(Ethnicity[Ethnicity=="White"])/length(Ethnicity), 
+        sex=length(Sex[Sex=="Male"])/length(Sex), 
+        orientation=length(SexualOrientation[SexualOrientation=="Bisexual"])/
+          length(SexualOrientation))
+p1 <- qplot(Decade, age, data=as) + geom_smooth(se=F)
+p2 <- qplot(Decade, white, data=as) + geom_smooth(se=F)
+p3 <- qplot(Decade, sex, data=as) + geom_smooth(se=F)
+p4 <- qplot(Decade, orientation, data=as) + geom_smooth(se=F)
+```
+
+Plot it
+===
+
+```{r, fig.height=10, fig.width=10, fig.align='center'}
+grid.arrange(p1, p2, p3, p4, ncol=4)
 ```
 
 What to include
