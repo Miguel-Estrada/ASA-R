@@ -204,13 +204,14 @@ french_fries %>%
 
 YOUR TURN
 ========================================================
-1. Read in the flights data:
+Read in the flights data:
 ```{r}
 flights <- read.csv("data/flights.csv")
 ```
 This dataset contains information on over 300,000 flights that departed from New York City in the year 2013.
-2. Using dplyr and the pipe operator, create a data frame consisting of the average arrival delay (``arr_delay``) based on the destination airport (``dest``). Sort this data frame in descending order, so the destination airport with the largest delay is first.
-3. Find out the most used airports for each airline carrier.
+
+1. Using dplyr and the pipe operator, create a data frame consisting of the average arrival delay (``arr_delay``) based on the destination airport (``dest``). Sort this data frame in descending order, so the destination airport with the largest delay is first.
+2. Find out the most used airports for each airline carrier.
 
 Dates and Times
 ========================================================
