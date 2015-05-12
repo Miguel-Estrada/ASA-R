@@ -6,12 +6,9 @@
 Packages, latest versions and make sure to install the dependencies of these packages
 
 - rmarkdown, knitr
-- ggplot2
-- plyr, dplyr, stringr
-- tidyr
-- reshape2
-- lubridate
 - devtools
+- ggplot2
+- tidyr, dplyr, lubridate
 - dichromat, munsell, RColorBrewer, scales
 - maps, ggmap, maptools, shapefiles, sp, rworldmap
 - MASS
