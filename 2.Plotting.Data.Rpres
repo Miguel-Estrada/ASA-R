@@ -6,6 +6,8 @@ date: 5/15-18/2015
 width: 1600
 height: 800
 
+<img align="right" src="figures/ethnicity.png" width="600">
+
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
 Using the package ggplot2
@@ -246,7 +248,7 @@ Place elements for primary comparison close together.
 <img align="middle" src="figures/proximity1.pdf" width="800">
 ***
 
-Having a hard time telling whether there is a week day/weekend day pattern?
+Having a hard time telling whether there is a week day/weekend day pattern? Plot proportions.
 
 ```{r, results='hold', echo=FALSE}
 library(dplyr)
@@ -362,9 +364,10 @@ YOUR TURN
 
 Make plots to answer these questions:
 
-- What are the numbers of winners different by declared sexual orientation?
+- How do the numbers of winners vary by declared sexual orientation?
 - Have the proportions in each of these categories changed over time?
 - Are these different by gender?
+- Is there are predominant religion?
 
 Resources
 ===

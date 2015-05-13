@@ -6,7 +6,7 @@ date: 5/15-18/2015
 width: 1600
 height: 800
 
-<img align="right" src="figures/gendermaps.png" width="600">
+<img align="right" src="figures/region-map.png" width="600">
 
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
@@ -81,8 +81,6 @@ If you type a command that R doesn't recognize you will get an error, eg.
 `> 5 % 3`
 
 `Error: unexpected input in "5 % 3"`
-
-<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
 Objects
 ===

@@ -6,6 +6,8 @@ date: 5/15-18/2015
 width: 1600
 height: 800
 
+<img align="right" src="figures/bp-spill.png" width="350">
+
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
 Back to the Oscars
@@ -192,9 +194,9 @@ qplot(long, lat, geom="polygon", data=states.sex.map, group=group,
 Your turn
 ===
 
-    Use ```merge``` to combine child healthcare data with maps information 
+- Use ```merge``` to combine child healthcare data with maps information 
     
-    Then use ```qplot``` to create a map of child healthcare undercoverage rate by state
+- Then use ```qplot``` to create a map of child healthcare undercoverage rate by state
 
 Cleaning up your maps
 ===
@@ -224,7 +226,7 @@ new_theme_empty$plot.margin <- structure(c(0, 0, -1, -1),
 ```{r, fig.align='center', fig.show='hide'}
 qplot(long, lat, geom="polygon", data=states.map, group=group, fill=avg.drnk) + 
   coord_map() +  theme_bw() +
-  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="red") + 
+  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="black") + 
   new_theme_empty +
   ggtitle("Average Number of Alcoholic Beverages Consumed Per Day")
 ```

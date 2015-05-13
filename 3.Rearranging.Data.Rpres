@@ -6,6 +6,10 @@ date: 5/15-18/2015
 width: 1600
 height: 800
 
+<img align="right" src="figures/sac.png" alt="Drawing" style="width: 500px"/>
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
 Using the packages tidyr, dplyr
 ========================================================
 During a ten week sensory experiment, 12 individuals were asked to assess taste of french fries on several scales (how potato-y, buttery, grassy, rancid, paint-y do the fries taste?)
