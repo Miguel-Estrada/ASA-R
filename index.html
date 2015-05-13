@@ -1,12 +1,19 @@
----
-layout: default_vis
-root: ""
----
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Frameset//EN" "http://www.w3.org/TR/html4/frameset.dtd">
 <html>
 <body>
 
-<h1>ASA Travelling R Workshop</h1>
+<head>ASA Travelling R Workshop</head>
+
+<frameset rows="150,*,100" frameborder="0" border="0" framespacing="0">
+  <frame name="topNav" src="top_nav.html">
+<frameset cols="50%,50%" frameborder="0" border="0" framespacing="0">
+	<frame name="notes" src="notes.html" marginheight="0" marginwidth="0" scrolling="auto" noresize>
+	<frame name="data" src="data.html" marginheight="0" marginwidth="0" scrolling="auto" noresize>
+</frameset>
+  <frame name="footer" src="footer.html">
+</frameset>
+</html>
+
 
 <a href="1.Getting.Started.html">1. Getting Started</a>
 <a href="2.Plotting.Data.html">2. Plotting Data</a>
