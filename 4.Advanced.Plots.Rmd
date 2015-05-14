@@ -5,7 +5,7 @@ date: "May 14, 2015"
 output: pdf_document
 ---
 
-<img align="right" src="figures/bp-spill.png" width="350">
+![Picture of Sample Applet](figures/bp-spill.png)
 
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
@@ -249,7 +249,7 @@ Polish the look of your map of child healthcare undercoverage rate by state!
 Putting it together
 ===
 
-<img align="middle" src="figures/BP_oil_spill.png" width="600">
+![Picture of Sample Applet](figures/BP_oil_spill.png)
 
 ***
 
@@ -263,7 +263,7 @@ animals <- read.csv("data/animal.csv")
 Map the data
 ===
 
-```{r, fig.show='hold'}
+```{r}
 qplot(Longitude, Latitude, colour=callSign, data=floats) + coord_map()
 qplot(Longitude, Latitude, colour=callSign, data=boats) + coord_map()
 qplot(Longitude, Latitude, colour=callSign, data=gliders) + coord_map()
@@ -271,7 +271,6 @@ qplot(Longitude, Latitude, colour=callSign, data=gliders) + coord_map()
 
 Add a map
 ===
-left:60%
 
 ```{r, fig.show='hide'}
 ggplot() +   # plot without a default data set

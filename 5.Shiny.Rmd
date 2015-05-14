@@ -35,9 +35,8 @@ A Simple Example
 library(shiny)
 runApp("shinyApps/01_Hello")
 ```
-<center>
-<img src="figures/HelloShinyScreenshot.png" alt="Picture of Hello Shiny! Applet">
-</center>
+
+![Picture of Sample Applet](figures/HelloShinyScreenshot.png)
 
 A Tale of Two Files
 ========================================================
