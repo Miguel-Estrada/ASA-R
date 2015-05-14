@@ -1,0 +1,374 @@
+---
+title: "Advanced Plotting"
+author: "Di Cook, Eric Hare"
+date: "May 14, 2015"
+output: pdf_document
+---
+
+<img align="right" src="figures/bp-spill.png" width="350">
+
+<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
+
+Back to the Oscars
+===
+
+```{r, results='hold'}
+oscars <- read.csv("data/oscars.csv", stringsAsFactors=FALSE)
+acting <- subset(oscars, AwardCategory=="Actor")
+actcountry <- data.frame(table(acting$Country))
+colnames(actcountry)[1] <- "Country"
+head(actcountry)
+```
+
+Adding maps
+========================================================
+
+```{r, results='hold'}
+library(ggplot2)
+library(maps)
+library(ggmap)
+library(rworldmap)
+mc <- joinCountryData2Map(actcountry, joinCode = "NAME", 
+    nameJoinColumn = "Country", mapResolution = "low")
+```
+
+Now draw 
+===
+
+```{r, results='hold', fig.align='center', fig.width=15}
+mapCountryData(mc, nameColumnToPlot="Freq")
+```
+
+And tweak 
+===
+
+```{r, results='hold', fig.align='center', fig.width=15}
+library(RColorBrewer)
+clrs <- brewer.pal(5,'RdPu')
+mapCountryData(mc, nameColumnToPlot="Freq", catMethod=c(0,1,5, 50, 100, 300), 
+               colourPalette=clrs)
+```
+
+Maps more generally
+===
+
+```{r, echo=FALSE}
+states.stats <- read.csv("data/states.stats.csv")
+states.sex.stats <- read.csv("data/states.sex.stats.csv")
+states.health.stats <- read.csv("data/states.health.stats.csv")
+states <- map_data("state")
+```
+
+A map is really just a bunch of latitude longitude points...
+
+```{r, fig.height = 6, fig.width=10, fig.align='center'}
+qplot(long, lat, geom="point", data=states) 
+```
+
+Maps more generally
+===
+
+... that are connected with lines in a very specific order.
+
+```{r, fig.height = 6, fig.width=10, fig.align='center'}
+qplot(long, lat, geom="path", data=states, group=group) + coord_map()
+```
+
+```coord_map``` sets the appropriate lat/long aspect ratio
+
+Basic map data
+===
+
+What needs to be in the data set in order to plot a basic map?
+
+- Need latitude/longitude points for all map boundaries
+- Need to know which boundary group all lat/long points belong
+- Need to know the order to connect points within each group
+
+Data for building basic state map
+===
+
+Our ```states``` data has all necessary information
+    
+```{r}
+states <- map_data("state")
+head(states)
+```
+
+Incorporating information about states
+===
+
+Want to incorporate additional information into the plot:
+
+- Add other geographic information by adding geometric layers to the plot
+- Add non-geopgraphic information by altering the fill color for each state
+
+- Use ```geom=''polygon''``` to treat states as solid shapes to add color
+- Incorporate numeric information using color shade or intensity
+- Incorporate categorical informaion using color hue 
+    
+Categorical information using hue
+===
+
+```{r echo=FALSE}
+western <- c("california","nevada","oregon","washington","idaho","montana","wyoming",
+                "colorado","utah","hawaii","alaska")
+mw <- c("north dakota","south dakota","nebraska","kansas","missouri","iowa",
+        "minnesota","wisconsin","michigan","illinois","indiana","ohio")
+sw <- c("arizona","new mexico","texas","oklahoma")
+south <- c("virginia","west virginia","kentucky","tennessee","north carolina","south carolina",
+           "florida","georgia","alabama","mississippi","louisiana","arkansas")
+ne <- c("maine","new hampshire","vermont","massachusetts","new york","rhode island",
+        "connecticut","new jersey","pennsylvania","delaware","maryland")
+State <- c(western,mw,sw,south,ne)
+StateGroups <- c( rep("West", length(western)),
+              rep("Midwest", length(mw)),
+              rep("Southwest", length(sw)),
+              rep("South", length(south)),
+              rep("Northeast", length(ne)) )
+statereg <- data.frame(State, StateGroups)
+states.class.map <- merge(states, statereg, by.x="region", by.y="State", all.x=T)
+states.class.map <- states.class.map[order(states.class.map$order),] 
+```
+
+If a categorical variable is assigned as the fill color then ```qplot``` will assign different hues for each category
+
+```{r, fig.height = 6, fig.width=10, fig.align='center'}
+qplot(long, lat, geom="polygon", data=states.class.map, group=group, 
+      fill=StateGroups, colour=I("black")) + coord_map()
+```
+
+Numerical information using shade and intensity
+===
+
+To show how was can add numerical information to map plots we will use the BRFSS data
+    
+- Behavioral Risk Factor Surveillance System
+- 2008 telephone survey run by the Center for Disease Control (CDC)
+- Ask a variety of questions related to health and wellness
+- Cleaned data with state aggregated values posted on website
+
+BRFSS data aggregated by state
+===
+
+```{r}
+head(states.stats)
+```
+
+Numerical Information Using Shade and Intensity
+===
+
+Average number of days in the last 30 days of insufficient sleep by state
+
+```{r, fig.height = 6, fig.width=10, fig.align='center'}
+states.map <- merge(states, states.stats, by.x="region", by.y="state.name", all.x=T)
+qplot(long, lat, geom="polygon", data=states.map, group=group, fill=avg.qlrest2) + coord_map()
+```
+
+BRFSS Data Aggregated by State and Gender
+===
+
+```{r}
+states.sex.map <- merge(states, states.sex.stats, by.x="region", by.y="state.name", all.x=T)
+head(states.sex.stats)
+```
+
+Adding Numerical Information
+===
+
+Average number of alcoholic drinks per day by state and gender
+
+```{r, fig.show='hide'}
+qplot(long, lat, geom="polygon", data=states.sex.map, 
+  group=group, fill=avg.drnk) +  
+  coord_map() + facet_grid(sex ~ .)
+```
+
+***
+```{r, echo=FALSE, fig.height = 6, fig.width=10, fig.align='center'}
+qplot(long, lat, geom="polygon", data=states.sex.map, group=group, 
+  fill=avg.drnk) + coord_map() + facet_grid(sex ~ .)
+```
+
+Your turn
+===
+
+- Use ```merge``` to combine child healthcare data with maps information 
+    
+- Then use ```qplot``` to create a map of child healthcare undercoverage rate by state
+
+Cleaning up your maps
+===
+
+Use ggplot2 options to clean up your map!
+
+- Adding Titles ``` + ggtitle(...)```
+- Might want a plain white background ```+ theme_bw()```
+- Extremely familiar geography may eliminate need for latitude and longitude axes ``` + theme(...)```
+- Want to customize color gradient   ``` + scale_fill_gradient2(...) ```
+- Keep aspect ratios correct  ``` + coord_map() ```
+
+Cleaning up your maps
+===
+
+```{r}
+new_theme_empty <- theme_bw()
+new_theme_empty$line <- element_blank()
+new_theme_empty$rect <- element_blank()
+new_theme_empty$strip.text <- element_blank()
+new_theme_empty$axis.text <- element_blank()
+new_theme_empty$axis.title <- element_blank()
+new_theme_empty$plot.margin <- structure(c(0, 0, -1, -1), 
+      unit = "lines", valid.unit = 3L, class = "unit")
+```
+
+```{r, fig.align='center', fig.show='hide'}
+qplot(long, lat, geom="polygon", data=states.map, group=group, fill=avg.drnk) + 
+  coord_map() +  theme_bw() +
+  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="black") + 
+  new_theme_empty +
+  ggtitle("Average Number of Alcoholic Beverages Consumed Per Day")
+```
+
+Show it
+===
+
+```{r, fig.align='center', echo=FALSE, fig.height=10, fig.width=16}
+qplot(long, lat, geom="polygon", data=states.map, group=group, fill=avg.drnk) + 
+  coord_map() +  theme_bw() +
+  scale_fill_gradient2(limits=c(1.5, 3),low="lightgray",high="black") + 
+  new_theme_empty +
+  ggtitle("Average Number of Alcoholic Beverages Consumed Per Day")
+```
+
+Your turn
+===
+
+Polish the look of your map of child healthcare undercoverage rate by state!
+
+Putting it together
+===
+
+<img align="middle" src="figures/BP_oil_spill.png" width="600">
+
+***
+
+BP Oil Spill May 24 2010 catastrophic environmental disaster in the Gulf. Different measurements provided by NOAA, EPA, US Fish and Wildlife.
+
+```{r}
+load("data/noaa.rdata")
+animals <- read.csv("data/animal.csv")
+```
+
+Map the data
+===
+
+```{r, fig.show='hold'}
+qplot(Longitude, Latitude, colour=callSign, data=floats) + coord_map()
+qplot(Longitude, Latitude, colour=callSign, data=boats) + coord_map()
+qplot(Longitude, Latitude, colour=callSign, data=gliders) + coord_map()
+```
+
+Add a map
+===
+left:60%
+
+```{r, fig.show='hide'}
+ggplot() +   # plot without a default data set
+ geom_path(data=states, aes(x=long, y=lat, group=group)) + 
+ geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign)) +   
+ geom_point(aes(x, y), shape="x", size=5, data=rig) + 
+ geom_text(aes(x, y), label="BP Oil rig", shape="x", size=5, data=rig, hjust = -0.1) + 
+ xlim(c(-91, -80)) + 
+ ylim(c(22,32)) + coord_map() + new_theme_empty
+```
+
+***
+```{r, echo=FALSE}
+ggplot() +   # plot without a default data set
+ geom_path(data=states, aes(x=long, y=lat, group=group)) + 
+ geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign)) +   
+ geom_point(aes(x, y), shape="x", size=5, data=rig) + 
+ geom_text(aes(x, y), label="BP Oil rig", shape="x", size=5, data=rig, hjust = -0.1) + 
+ xlim(c(-91, -80)) + 
+ ylim(c(22,32)) + coord_map() + new_theme_empty
+```
+
+Get fancy
+===
+
+```{r, fig.show='hide'}
+gm <- get_googlemap(center = c(lon = -86.77, lat = 26.99), zoom=6)
+ggmap(gm) + geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign))
+```
+
+***
+```{r, echo=FALSE}
+gm <- get_googlemap(center = c(lon = -86.77, lat = 26.99), zoom=6)
+ggmap(gm) + geom_point(data=floats, aes(x=Longitude, y=Latitude, colour=callSign))
+```
+
+Pairs Plot
+===
+
+A scatterplot matrix allows all pairs of numeric variables to be examined, in a manner similar to looking at a correlation matrix. The generalized pairs plot, places appropriate plots of pairs of variables in the cells depending on the type of variable.
+
+***
+```{r, results='hold', fig.align='center'}
+library(GGally)
+ggpairs(acting, columns=c(2,6,8))
+```
+
+Parallel coordinate plots
+===
+
+```{r, fig.show='hide'}
+iris2 <- iris
+iris2$alphaLevel <- c("setosa" = 0.2, 
+  "versicolor" = 0, "virginica" = 0.5)[iris2$Species]
+gpd <- ggparcoord(data = iris2, 
+  columns = 1:4, 
+  groupColumn = 5, order = "anyClass",
+  showPoints = TRUE, 
+  title = "Iris Data",
+  alphaLines = "alphaLevel")
+```
+
+***
+
+```{r, echo=FALSE, fig.width=10, fig.height=5}
+gpd
+```
+
+Arranging multiple plots on a page
+===
+
+```{r}
+acting$Decade <- floor(acting$Year/10)*10
+library(dplyr)
+as <- summarise(group_by(acting, Decade), age=mean(Age, na.rm=T), 
+        white=length(Ethnicity[Ethnicity=="White"])/length(Ethnicity), 
+        sex=length(Sex[Sex=="Male"])/length(Sex), 
+        orientation=length(SexualOrientation[SexualOrientation=="Bisexual"])/
+          length(SexualOrientation))
+p1 <- qplot(Decade, age, data=as) + geom_smooth(se=F)
+p2 <- qplot(Decade, white, data=as) + geom_smooth(se=F)
+p3 <- qplot(Decade, sex, data=as) + geom_smooth(se=F)
+p4 <- qplot(Decade, orientation, data=as) + geom_smooth(se=F)
+```
+
+Plot it
+===
+
+```{r, fig.height=4, fig.width=18, fig.align='center'}
+library(gridExtra)
+grid.arrange(p1, p2, p3, p4, ncol=4)
+```
+
+Summary
+===
+
+- Grammar is good!
+- Almost anything is possible
+- R Graphics Cookbook by Winston Chang http://www.cookbook-r.com/Graphs/
+- http://stackoverflow.com
