@@ -5,7 +5,7 @@ date: "May 14, 2015"
 output: pdf_document
 ---
 
-<img align="right" src="figures/ethnicity.png" width="600">
+![Ethnicity](figures/ethnicity.png)
 
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
@@ -59,7 +59,7 @@ Results corroborated by Heer & Bostock (2010).
 
 ***
 
-<img align="center" src="figures/cleveland.png" width="600">
+![Cleveland](figures/cleveland.png)
 
 Basic mappings
 ========================================================
@@ -136,7 +136,8 @@ qplot(Ethnicity, data=subset(acting, Ethnicity != "White")) + coord_flip()
 Color bars by gender
 
 ```{r, results='hold'}
-qplot(Ethnicity, data=subset(acting, Ethnicity != "White"), fill=Sex) + coord_flip() + theme(legend.position="bottom")
+qplot(Ethnicity, data=subset(acting, Ethnicity != "White"), fill=Sex) +
+    coord_flip() + theme(legend.position="bottom")
 ```
 
 Color choice
@@ -196,8 +197,10 @@ Facetting
 Whites dominate again, so lets use facetting to zoom in. Focus only on ethnicities with reasonable numbers. 
 
 ```{r, results='hold', fig.width=12, fig.height=6, fig.align='center'}
-qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"), colour=Ethnicity, group=Ethnicity, size=I(5)) + geom_line() + scale_colour_brewer(type="qual", palette=2) +
-facet_wrap(~Ethnicity, scales="free_y")
+qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"),
+      colour=Ethnicity, group=Ethnicity, size=I(5)) +
+    geom_line() + scale_colour_brewer(type="qual", palette=2) +
+    facet_wrap(~Ethnicity, scales="free_y")
 ```
 
 Examine trend
@@ -240,11 +243,9 @@ qplot(Decade, Prop, data=subset(ptable, Ethnicity=="White"|Ethnicity=="Black"),
 
 Perceptual principles: proximity
 ===
-left: 50%
-
 Place elements for primary comparison close together. 
 
-<img align="middle" src="figures/proximity1.pdf" width="800">
+![Proximity](figures/proximity1.pdf)
 ***
 
 Having a hard time telling whether there is a week day/weekend day pattern? Plot proportions.
@@ -262,8 +263,6 @@ qplot(s.weekd, p, data=d, geom=c("point", "line"), ylim=c(0,0.045),
 
 Perceptual principles: proximity
 ===
-left: 50%
-
 
 Rearrange into proportions, and plot these as points. The question "Is there a difference in purchase rate by day of search?" Proportions better answers this question. (Numbers for each day of the week are large enough for proportion to be reliably interpreted.)
 
@@ -283,12 +282,10 @@ qplot(s.weekd, p, data=d, geom=c("point", "line"), ylim=c(0,0.045),
 
 Perceptual principles: proximity
 ===
-left: 40%
-
 Primary purpose is to examine wins and losses of two teams. Closest bars are the two teams, faceted by win/loss. 
 ***
 
-<img align="right" src="figures/soccer-stats.png" width="1000">
+![Soccer Stats](figures/soccer-stats.png)
 
 Perceptual principles: color
 ===
@@ -333,14 +330,14 @@ Exploring the Oscars
 
 How does the age of the winners change, on average by gender, over time?
 
-```{r, results='hold', fig.show='hold', fig.height=5, fig.width=5}
+```{r, fig.height=5, fig.width=5}
 qplot(factor(Decade), Age, data=acting, geom="boxplot")
 qplot(Decade, Age, data=acting, geom=c("point", "smooth"), se=F)
 ```
 
 ***
 
-```{r, results='hold', fig.show='hold', fig.height=5, fig.width=5}
+```{r, fig.height=5, fig.width=5}
 qplot(factor(Decade), Age, data=acting, geom="boxplot", facets=.~Sex)
 qplot(factor(Decade), Age, data=acting, geom="boxplot", fill=Sex) + theme(legend.position="bottom")
 ```

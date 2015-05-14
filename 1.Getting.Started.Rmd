@@ -1,11 +1,11 @@
 ---
-title: "1.Getting.Started"
+title: "Working with R to Analyze and Plot Data"
 author: "Di Cook, Eric Hare"
 date: "May 14, 2015"
 output: pdf_document
 ---
 
-<img align="right" src="figures/gendermaps.png" width="600">
+![Gender Maps](figures/region-map.png)
 
 <div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
@@ -80,8 +80,6 @@ If you type a command that R doesn't recognize you will get an error, eg.
 `> 5 % 3`
 
 `Error: unexpected input in "5 % 3"`
-
-<div class="footer"> California Dreaming - ASA Travelling Workshop </div>
 
 Objects
 ===
