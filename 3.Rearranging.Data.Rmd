@@ -53,12 +53,12 @@ What we have and what we want
 ========================================================
 We want to change this **wide format**:
 
-<img src="figures/tableoverview.png" alt="Drawing" style="width: 1000px;"/>
+![Wide Format](figures/tableoverview.png)
 
 ***
 to this **long format**:
 
-<img src="figures/tablelong.png" alt="Drawing" style="width: 200px;"/>
+![Long Format](figures/tablelong.png)
 
 Gathering
 ========================================================
@@ -135,7 +135,8 @@ The Split-Apply-Combine Approach
 - *Apply* some function to each sub-dataset to compute a result
 - *Combine* the results of the function calls into a one dataset
 
-<img src="figures/sac.png" alt="Drawing" style="width: 600px; margin-left: 500px;"/>
+![Picture of Sample Applet](figures/sac.png)
+
 
 Split-Apply-Combine in dplyr
 ========================================================
