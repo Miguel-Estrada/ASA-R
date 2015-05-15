@@ -68,7 +68,7 @@ Basic mappings
 Quantitative information should be mapped to position along a line, as first preference. Only two quantitative variables in the data: Age, NumberofAwards. Could treat year as quantitive to begin, too.
 
 But unit of the data is person, award winner, need to aggregate based on categorical variables. 
-Then were will have counts for categories, which is quantitative information.
+Then we will have counts for categories, which is quantitative information.
 
 Let's look at Ethnicity. 
 
@@ -250,16 +250,6 @@ Place elements for primary comparison close together.
 
 Having a hard time telling whether there is a week day/weekend day pattern? Plot proportions.
 
-```{r, results='hold', echo=FALSE}
-library(dplyr)
-hotel <- read.csv("data/hotel-cleaned.csv", stringsAsFactors=FALSE)
-hotel$s.weekd <- factor(hotel$s.weekd, 
-  levels=c("Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"), 
-  labels=c("M","Tu","W", "Th", "F", "Sa","Su"))
-d <- summarise(group_by(hotel, s.weekd), p=length(purchase[purchase==1])/length(purchase))
-qplot(s.weekd, p, data=d, geom=c("point", "line"), ylim=c(0,0.045), 
-      xlab="Day of the Week", ylab="Proportion purchased", group=1)
-```
 
 Perceptual principles: proximity
 ===
@@ -349,11 +339,19 @@ qplot(factor(Decade), Age, data=acting, geom="boxplot", fill=Sex) + theme(legend
 Showing the statistics
 ===
 
-```{r, results='hold', fig.show='hold'}
-agesex <- summarise(group_by(acting, Decade, Sex), m=mean(Age, na.rm=T), 
-                    s=qt(0.975, length(Age)-1)*sd(Age, na.rm=T)/length(Age))
-qplot(Decade, m, data=agesex, group=Sex, colour=Sex, geom=c("point", "line")) + 
+```{r, results='hold', fig.show='hold', fig.align='center', fig.height=5, fig.width=5}
+agesex <- summarise(group_by(acting, Decade, 
+    Sex), m=mean(Age, na.rm=T), 
+    s=qt(0.975, length(Age)-1)*
+      sd(Age, na.rm=T)/length(Age))
+qplot(Decade, m, data=agesex, 
+      group=Sex, colour=Sex, 
+      geom=c("point", "line")) + 
   theme(legend.position="bottom")
+```
+
+***
+```{r, results='hold', fig.show='hold', fig.align='center', fig.height=5, fig.width=5}
 qplot(Decade, m, data=agesex, group=Sex, colour=Sex, geom=c("point", "line")) + 
   geom_ribbon(mapping=aes(ymin=m-s, ymax=m+s, fill=Sex), alpha=0.5) +
   theme(legend.position="bottom")

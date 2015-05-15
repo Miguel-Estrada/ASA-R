@@ -59,11 +59,11 @@ Lines of code in the text editor window can be run one-by-one by setting the cur
 Your turn
 ===
 
-- Download the "try.Rmd" file, 
-- Open in the R Studio, 
+- Choose ```File```, ```New File```, ```R Markdown``` in the R Studio menus, 
+- Save it as ```try.Rmd```
 - Knit as html, and knit as Word
 
-For the advanced user, you can also write in latex (instead of markdown) and 
+For the advanced user, you can also write in latex (instead of markdown) and output to pdf.
 
 R as a calculator
 ===
@@ -93,7 +93,7 @@ mynumbers
 mynumbers + 2
 ```
 
-Names can be almost anything, except for special characters `^, !, $, @, +, -, /, *`. It is good practice to name your objects with some meaning for what they contain, be reasonably short (less typiing). They should from common R functions, for example, don't use `data` because it is also used to load stored data from packages, or `c` because this is an R function that allows you to collect a bunch of objects together. You won't get errors by using these names but you may get confused when you come back and look at your code later. 
+Names can be almost anything, except for special characters `^, !, $, @, +, -, /, *`. It is good practice to name your objects with some meaning for what they contain, be reasonably short (less typing). They should from common R functions, for example, don't use `data` because it is also used to load stored data from packages, or `c` because this is an R function that allows you to collect a bunch of objects together. You won't get errors by using these names but you may get confused when you come back and look at your code later. 
 
 Types of objects
 ===
